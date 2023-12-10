@@ -1,9 +1,8 @@
-from calendar import EPOCH
 import math
 import numpy as np
-from numpy import random as rand
+from numpy import maximum, random as rand
 
-class NeuralNet:
+class Perceptron:
     def __init__(self, inputs, hiddenLayers, outputLayer,
                     loss='sumSquaredErrors', activation='sigmoid', epochs=25, learningRate=0.1, momentum=0.95):
         '''
@@ -109,34 +108,45 @@ class NeuralNet:
     
     ##TODO: Activation Functions
     def __linear(self, inputs, weights, hiddenLayerNum):
-        pass
+        return self.__summation(inputs,weights)
     def __step(self, inputs, weights, hiddenLayerNum):
-        pass
+        return 1 if self.__summation(inputs,weights)>=0 else 0
     def __sigmoid(self, inputs, weights, hiddenLayerNum):
         return 1/(1+math.e**(-self.__summation(inputs)))
     def __tanh(self, inputs, weights, a=1.716,b=0.667):
         return ((2*a)/(1+math.e**(-b*self.__summation(inputs,weights))))-a
     def __relu(self, inputs, weights, hiddenLayerNum):
-        pass
+        return maximum(0,self.__summation(inputs,weights))
     def __leakyRelu(self, inputs, weights, hiddenLayerNum):
-        pass
+        return maximum(0.01*self.__summation(inputs,weights),self.__summation(inputs,weights))
     def activateNode(self, activation, inputs, weights):
-        if(activation=="linear"):
-            self.__sigmoid(inputs, weights)
-        elif(activation=="step"):
-            self.__sigmoid(inputs, weights)
-        elif(activation=="sigmoid"):
-            self.__sigmoid(inputs, weights)
-        elif(activation=="tanh"):
-            self.__sigmoid(inputs, weights)
-        elif(activation=="relu"):
-            self.__sigmoid(inputs, weights)
-        elif(activation=="leakyRelu"):
-            self.__sigmoid(inputs, weights)
+        try:
+            match(activation):
+                case "linear":
+                    self.__linear(inputs, weights)
+                case "step":
+                    self.__step(inputs, weights)
+                case "sigmoid":
+                    self.__sigmoid(inputs, weights)
+                case "tanh":
+                    self.__tanh(inputs, weights)
+                case "relu":
+                    self.__relu(inputs, weights)
+                case "leakyRelu":
+                    self.__leakyRelu(inputs, weights)
+                case _:
+                    raise NotImplementedError
+        except NotImplementedError:
+            print("Error: activation function not implemented: ", activation)
+            return -1
 
-    def __summation(self, inputs, layer): ##TODO: Summation
+    def __summation(self, inputs, weights, layer=None): ##TODO: Summation
         #inputs shape = (inputSize,1) weights = (inputSize,hiddenLayerSize)
-        sum = np.sum(inputs)
+        # sigma x_i*w_ij-theta_i
+        sum = 0
+        for i in range(len(inputs)):
+            for j in range(len(weights)):
+                np.sum((sum,(inputs[i]*weights[i][j])-self.thresholds[i]))
         return sum
     def __outputErr(self, desired, actual):
         return (desired-actual)

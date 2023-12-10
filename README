@@ -1,0 +1,46 @@
+# Perceptron Neural Network
+
+This is a Python implementation of a Perceptron, a type of artificial neural network. The Perceptron class includes methods for initializing the network, setting and getting weights and thresholds, and various activation functions.
+
+## Features
+
+- Different activation functions: linear, step, sigmoid, tanh, relu, leaky relu
+- Error gradient calculation
+- Weighted sum calculation
+- Sum of squared errors calculation
+- Training function with optional accelerated learning
+
+## Usage
+
+First, import the Perceptron class:
+
+```python
+from nnet import Perceptron
+```
+Then, create a new instance of the Perceptron class, specifying the number of inputs, hidden layers, output layer, loss function, activation function, number of epochs, learning rate, and momentum:
+```python
+p = Perceptron(inputs, hiddenLayers, outputLayer, loss='sumSquaredErrors', activation='sigmoid', epochs=25, learningRate=0.1, momentum=0.95)
+```
+You can then use the various methods of the Perceptron class to train and test the network.
+#
+### Methods
+- __init__(self, inputs, hiddenLayers, outputLayer, loss='sumSquaredErrors', activation='sigmoid', epochs=25, learningRate=0.1, momentum=0.95): Initializes the network.
+- __linear(self, inputs, weights, hiddenLayerNum): Linear activation function.
+- __step(self, inputs, weights, hiddenLayerNum): Step activation function.
+- __sigmoid(self, inputs, weights, hiddenLayerNum): Sigmoid activation function.
+- __tanh(self, inputs, weights, a=1.716,b=0.667): Tanh activation function.
+- __relu(self, inputs, weights, hiddenLayerNum): ReLU activation function.
+- __leakyRelu(self, inputs, weights, hiddenLayerNum): Leaky ReLU activation function.
+activateNode(self, activation, inputs, weights): Applies the specified activation function to the inputs and weights of a node.
+- __summation(self, inputs, weights, layer=None): Calculates the weighted sum of the inputs and weights, subtracting the threshold.
+- __errorGradient(self, output, outputErr, hidden, nextLayerOutput=0, nextLayerOutputErr=0): Calculates the error gradient.
+- __deltaWeight(self, output, errorGradient): Calculates the delta weight for weight adjustment.
+- __genDeltaWeight(self, prevWeight, output, errorGradient): Calculates the generalized delta weight for accelerated learning.
+- __sumSquaredErrors(self, desired, actual): Calculates the sum of squared errors.
+- train(self, accelerated): Trains the network. If accelerated is True, uses the generalized delta rule for weight adjustment.
+- test(self): Tests the network.
+
+#
+### Note
+This is a basic implementation of a Perceptron and may not include all features of a full-featured neural network library. The methods for getting and setting weights and thresholds, as well as getting various types of information about the network, are currently placeholders and do not have implemented functionality.
+
