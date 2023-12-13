@@ -112,7 +112,7 @@ class Perceptron:
     def __step(self, inputs, weights, hiddenLayerNum):
         return 1 if self.__summation(inputs,weights)>=0 else 0
     def __sigmoid(self, inputs, weights, hiddenLayerNum):
-        return 1/(1+math.e**(-self.__summation(inputs)))
+        return 1/(1+math.e**(-self.__summation(inputs,weights)))
     def __tanh(self, inputs, weights, a=1.716,b=0.667):
         return ((2*a)/(1+math.e**(-b*self.__summation(inputs,weights))))-a
     def __relu(self, inputs, weights, hiddenLayerNum):
@@ -140,7 +140,7 @@ class Perceptron:
             print("Error: activation function not implemented: ", activation)
             return -1
 
-    def __summation(self, inputs, weights, layer=None): ##TODO: Summation
+    def __summation(self, inputs, weights): ##TODO: Summation
         #inputs shape = (inputSize,1) weights = (inputSize,hiddenLayerSize)
         # sigma x_i*w_ij-theta_i
         sum = 0
@@ -152,7 +152,7 @@ class Perceptron:
         return (desired-actual)
     def __errorGradient(self, output, outputErr, hidden, nextLayerOutput=0, nextLayerOutputErr=0): ##TODO: Error Gradient
         if(hidden):
-            return (output-(1-output)*self.__summation(self.__errorGradient(nextLayerOutput,nextLayerOutputErr,False)))
+            return (output-(1-output)*self.__summation(self.__errorGradient(nextLayerOutput,nextLayerOutputErr,False),self.weights))
         else:
             return (output-(1-output)*outputErr)
     def __deltaWeight(self, output, errorGradient):
